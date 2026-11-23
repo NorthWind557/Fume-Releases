@@ -1,0 +1,17 @@
+.env
+.env.*
+!.env.example
+secrets/
+private/
+*.pem
+*.key
+*.pfx
+*.p12
+*.db
+*.sqlite*
+*.log
+*.exe
+*.msi
+*.zip
+*.dll
+*.pdb

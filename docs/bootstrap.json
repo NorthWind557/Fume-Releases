@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "status": "preparation",
+  "release": null,
+  "account_server": null,
+  "tailscale": {
+    "invite_url": null
+  }
+}
