@@ -1,7 +1,7 @@
 name: Publicar entrega revisada
 on:
   push:
-    branches: [main]
+    branches: [staging/0.39.39]
     paths: [publication.json]
 permissions:
   contents: write

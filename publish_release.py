@@ -44,14 +44,17 @@ def main():
     require(re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+',version),'Versão inválida.')
     tag='v'+version;bundle=f'Fume_{version}_Instalador_Windows_x64.zip'
     names={bundle,bundle+'.sha256',f'Fume_Contas_Servidor_{version}.zip',f'VALIDACAO-{version}.md'}
-    location=urlsplit(config['artifact_url'])
-    require(location.scheme=='https' and not location.username and not location.password and not location.fragment and (location.hostname or '').endswith(('.oaiusercontent.com','.blob.core.windows.net','.githubusercontent.com')),'Origem da entrega inválida.')
-    archive=Path('delivery.zip');size=0
-    try:
-        with urllib.request.urlopen(config['artifact_url'],timeout=45) as source,archive.open('xb') as output:
-            while part:=source.read(1024*1024):
-                size+=len(part);require(size<=220*1024*1024,'Entrega excede o limite.');output.write(part)
-    except Exception:raise ValueError('Não foi possível receber a entrega temporária; nenhuma configuração de acesso foi publicada.') from None
+    require(os.environ['GITHUB_REF']=='refs/heads/staging/0.39.39','Branch de entrega inesperado.')
+    main=json.loads(gh('api',f'repos/{REPO}/git/ref/heads/main'))
+    require(main['object']['sha']==config['release_target'],'A referência pública mudou; confira a entrega antes de continuar.')
+    archive=Path('delivery.zip');parts=config['parts'];total=0
+    require(1<=len(parts)<=32,'Quantidade de partes inválida.')
+    with archive.open('xb') as output:
+        for index,item in enumerate(parts):
+            require(item['path']==f'delivery/{index:03}.part','Caminho de parte inesperado.')
+            path=Path(item['path']);require(path.is_file() and 0<path.stat().st_size<=8*1024*1024 and path.stat().st_size==item['bytes'],'Tamanho de parte incorreto.')
+            require(digest(path)==item['sha256'],'Hash de parte incorreto.')
+            data=path.read_bytes();total+=len(data);require(total<=220*1024*1024,'Entrega excede o limite.');output.write(data)
     require(digest(archive)==config['artifact_sha256'],'Hash da entrega não confere.')
     directory=Path('release');directory.mkdir()
     with ZipFile(archive) as package:
@@ -78,7 +81,7 @@ O pacote pequeno do servidor e o roteiro de validação estão nos arquivos anex
 ''')
     existing=subprocess.run(['gh','release','view',tag,'--repo',REPO,'--json','isDraft'],capture_output=True)
     if existing.returncode==0:require(json.loads(existing.stdout)['isDraft'],'Esta versão já está publicada; os arquivos não serão substituídos.')
-    else:gh('release','create',tag,'--repo',REPO,'--target',os.environ['GITHUB_SHA'],'--draft','--title','Fume '+version,'--notes-file',str(notes))
+    else:gh('release','create',tag,'--repo',REPO,'--target',config['release_target'],'--draft','--title','Fume '+version,'--notes-file',str(notes))
     gh('release','upload',tag,*[str(directory/name) for name in sorted(names)],'--repo',REPO,'--clobber')
     uploaded=json.loads(gh('api',f'repos/{REPO}/releases/tags/{tag}'))
     assets={a['name']:a for a in uploaded['assets']}
@@ -96,7 +99,8 @@ O pacote pequeno do servidor e o roteiro de validação estão nos arquivos anex
     content=base64.b64encode((json.dumps(manifest,indent=2)+'\n').encode()).decode()
     identity={'name':'NorthWind557','email':'360101070+NorthWind557@users.noreply.github.com'}
     gh('api','--method','PUT',f'repos/{REPO}/contents/docs/bootstrap.json','--input','-',data={'message':'Publicar distribuição autenticada do Fume '+version,'content':content,'sha':previous['sha'],'branch':'main','author':identity,'committer':identity})
-    print('Release pública e manifesto assinado publicados com os hashes conferidos.')
+    gh('api','--method','DELETE',f'repos/{REPO}/git/refs/heads/staging/0.39.39')
+    print('Release pública e manifesto assinado publicados com os hashes conferidos. O branch temporário de entrega foi removido.')
 
 
 if __name__=='__main__':
