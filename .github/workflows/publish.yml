@@ -1,0 +1,21 @@
+name: Publicar entrega revisada
+on:
+  push:
+    branches: [main]
+    paths: [publication.json]
+permissions:
+  contents: write
+concurrency:
+  group: public-release
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Conferir assinatura, publicar arquivos e atualizar Pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 publish_release.py
