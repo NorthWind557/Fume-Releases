@@ -1,21 +1,12 @@
-# Fume — distribuição
+# Fume para Windows
 
-Repositório público de instaladores, notas de versão e configuração inicial do Fume.
+Distribuição pública dos instaladores, pacotes do servidor e roteiros de validação do Fume. O código do aplicativo permanece privado.
 
-## Estado atual
+- [Baixar o Fume](https://northwind557.github.io/Fume-Releases/)
+- [Release 0.39.39](https://github.com/NorthWind557/Fume-Releases/releases/tag/v0.39.39)
+- [Validar esta versão](docs/VALIDACAO-0.39.39.md)
+- [Operação do publicador pelo proprietário](docs/DISTRIBUICAO-J8.md)
 
-Distribuição em preparação. Nenhum instalador foi publicado neste repositório ainda.
+A primeira migração da 0.39.38 requer executar o instalador novo uma vez. Depois, as atualizações públicas dispensam token e conta GitHub. O manifesto de distribuição é assinado; o cliente confere a assinatura e os hashes antes de preparar atualizações.
 
-Os usuários finais não precisarão criar tokens GitHub para baixar as futuras releases públicas. A adaptação do atualizador e o assistente de configuração inicial ainda estão em implementação.
-
-## GitHub Pages
-
-A pasta `docs` está preparada para publicação. O arquivo `docs/bootstrap.json` contém somente o estado de preparação: não fornece uma versão para baixar, certificado ou link Tailscale ativo.
-
-A ativação do Pages e a publicação de uma configuração operacional serão conferidas separadamente. Uma configuração de atualização real exigirá verificação de autenticidade pelo cliente.
-
-## Privacidade
-
-Credenciais de publicação e da API Tailscale ficam nas configurações protegidas da operação. Nunca inclua tokens, chaves privadas, bancos de contas, logs pessoais ou cópias de configurações locais neste repositório.
-
-Instaladores e pacotes devem ser publicados como arquivos de Releases após revisão e validação.
+A preparação automática de PCs novos depende da configuração inicial do publicador no J8 pelo proprietário. O cadastro da conta Fume usa usuário e senha, sem convite. Credenciais administrativas e chaves privadas não pertencem a este repositório nem aos instaladores.

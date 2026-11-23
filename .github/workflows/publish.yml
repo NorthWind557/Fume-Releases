@@ -1,8 +1,8 @@
 name: Publicar entrega revisada
 on:
   push:
-    branches: [staging/0.39.39]
-    paths: [publication.json]
+    branches: ['staging/**']
+    paths: [publication.json, publish_release.py]
 permissions:
   contents: write
 concurrency:

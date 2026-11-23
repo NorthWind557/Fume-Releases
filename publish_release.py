@@ -20,7 +20,11 @@ def require(value,message):
 
 def gh(*args,data=None):
     result=subprocess.run(['gh',*args],input=None if data is None else json.dumps(data).encode(),capture_output=True)
-    require(result.returncode==0,'A operação de publicação no GitHub não foi confirmada.')
+    if result.returncode:
+        detail=result.stderr.decode('utf-8','replace')[-1800:]
+        token=os.environ.get('GH_TOKEN','')
+        if token:detail=detail.replace(token,'[redacted]')
+        raise ValueError('GitHub: '+str(args[:3])+' — '+detail)
     return result.stdout
 
 
@@ -44,7 +48,7 @@ def main():
     require(re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+',version),'Versão inválida.')
     tag='v'+version;bundle=f'Fume_{version}_Instalador_Windows_x64.zip'
     names={bundle,bundle+'.sha256',f'Fume_Contas_Servidor_{version}.zip',f'VALIDACAO-{version}.md'}
-    require(os.environ['GITHUB_REF']=='refs/heads/staging/0.39.39','Branch de entrega inesperado.')
+    require(os.environ['GITHUB_REF']=='refs/heads/staging/'+version,'Branch de entrega inesperado.')
     main=json.loads(gh('api',f'repos/{REPO}/git/ref/heads/main'))
     require(main['object']['sha']==config['release_target'],'A referência pública mudou; confira a entrega antes de continuar.')
     archive=Path('delivery.zip');parts=config['parts'];total=0
@@ -83,7 +87,7 @@ O pacote pequeno do servidor e o roteiro de validação estão nos arquivos anex
     if existing.returncode==0:require(json.loads(existing.stdout)['isDraft'],'Esta versão já está publicada; os arquivos não serão substituídos.')
     else:gh('release','create',tag,'--repo',REPO,'--target',config['release_target'],'--draft','--title','Fume '+version,'--notes-file',str(notes))
     gh('release','upload',tag,*[str(directory/name) for name in sorted(names)],'--repo',REPO,'--clobber')
-    uploaded=json.loads(gh('api',f'repos/{REPO}/releases/tags/{tag}'))
+    uploaded=next(item for item in json.loads(gh('api',f'repos/{REPO}/releases')) if item['tag_name']==tag)
     assets={a['name']:a for a in uploaded['assets']}
     require(set(assets)==names,'Os arquivos publicados não correspondem à entrega.')
     for name in names:
@@ -99,7 +103,7 @@ O pacote pequeno do servidor e o roteiro de validação estão nos arquivos anex
     content=base64.b64encode((json.dumps(manifest,indent=2)+'\n').encode()).decode()
     identity={'name':'NorthWind557','email':'360101070+NorthWind557@users.noreply.github.com'}
     gh('api','--method','PUT',f'repos/{REPO}/contents/docs/bootstrap.json','--input','-',data={'message':'Publicar distribuição autenticada do Fume '+version,'content':content,'sha':previous['sha'],'branch':'main','author':identity,'committer':identity})
-    gh('api','--method','DELETE',f'repos/{REPO}/git/refs/heads/staging/0.39.39')
+    gh('api','--method','DELETE',f'repos/{REPO}/git/refs/heads/staging/{version}')
     print('Release pública e manifesto assinado publicados com os hashes conferidos. O branch temporário de entrega foi removido.')
 
 
