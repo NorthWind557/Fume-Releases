@@ -77,11 +77,11 @@ def main():
     require(previous['sha']==config['bootstrap_base_sha'],'O J8 ou outra publicação atualizou o manifesto. Prepare outra assinatura sobre a versão atual.')
     notes=Path('release-notes.md');notes.write_text(f'''Fume {version}
 
-Cadastro dentro do aplicativo sem convite; correção do crossfade da Biblioteca; capas DMM/FANZA e composições personalizadas na vitrine do perfil; atualização pública sem token GitHub.
+Perfil reorganizado em duas colunas permanentes, loja de pontos com personalizações originais, miniperfil, carteiras GC/GP, carrinho, aquisições, devoluções e eventos promocionais no J8.
 
-Baixe o ZIP, extraia-o e execute o Setup Windows x64. Para a primeira migração da 0.39.38, execute este instalador uma vez. Depois o próprio Fume consulta a distribuição nova.
+Baixe o ZIP, extraia-o e execute o Setup Windows x64. A atualização pelo Fume continua disponível sem configurar token GitHub.
 
-O pacote pequeno do servidor e o roteiro de validação estão nos arquivos anexados. A preparação de PCs novos pelo Tailscale depende da configuração inicial do publicador no J8 pelo proprietário.
+O pacote pequeno do servidor e o roteiro de validação estão nos arquivos anexados. Atualize o servidor do J8 uma vez para habilitar as novas funções de perfil e compras. Contas, IDs e sessões existentes são preservados.
 ''')
     existing=subprocess.run(['gh','release','view',tag,'--repo',REPO,'--json','isDraft'],capture_output=True)
     if existing.returncode==0:require(json.loads(existing.stdout)['isDraft'],'Esta versão já está publicada; os arquivos não serão substituídos.')
