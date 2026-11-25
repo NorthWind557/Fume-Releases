@@ -6,7 +6,9 @@ Instalador e atualizações públicas do Fume para Windows x64.
 - [Validação da versão 0.39.41](docs/VALIDACAO-0.39.41.md)
 - [Atualizar o servidor do J8](docs/ATUALIZAR-SERVIDOR-J8.md)
 
-O aplicativo consulta a distribuição assinada e baixa atualizações sem token GitHub. Em um PC novo, o assistente orienta a conexão pelo Tailscale e o cadastro de usuário e senha. É necessário entrar também no aplicativo Tailscale do Windows; criar a conta no site não conecta o computador automaticamente.
+Para atualizar pelo aplicativo, abra **Ajuda → Verificar atualizações…**. O Fume baixa e verifica o instalador sem token do GitHub.
+
+Em um PC novo, peça ao responsável pelo J8 o acesso ao Tailscale e os dados do servidor por um canal privado. Abra **Configurações → Conta**, informe o endereço HTTPS, use **Escolher certificado público…** e clique em **Testar e salvar servidor**.
 
 A versão 0.39.41 separa compra e instalação, inclui a fila Downloads, acrescenta GIFs e molduras editáveis ao perfil e permite revisar alterações na página do jogo e nos arquivos da instalação.
 
