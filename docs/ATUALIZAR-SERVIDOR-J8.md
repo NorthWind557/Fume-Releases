@@ -1,25 +1,25 @@
-# Atualizar o J8 para perfis, carteiras e compras do Fume 0.39.41
+# Atualizar o J8 para perfis, carteiras e compras do Fume 0.39.42
 
 Faça esta atualização **uma vez no celular J8**. Os dois PCs usarão o mesmo servidor atualizado. Suas contas, IDs, certificados, sessões salvas e a inicialização automática já validada permanecem. Não reinstale Termux, Tailscale ou Termux:Boot. **Não execute `init`.**
 
-Esta atualização acrescenta GIF em todos os espaços de personalização, composições de moldura editáveis e a referência completa dos jogos adquiridos para a Biblioteca. Os dados anteriores são preservados. Perfis existentes mantêm imagem, descrição e jogos; o novo editor acrescenta estilo e miniperfil.
+Esta atualização permite sincronizar o enquadramento do fundo do miniperfil e receber GIFs de até 24 MiB por arquivo. Perfis existentes mantêm imagens, jogotecas e composições. Atualize o J8 antes dos PCs.
 
 **Opção mais simples para obter o ZIP:** no Termux, execute este comando e depois prossiga ao item 2:
 
 ```sh
-curl --fail --location --retry 3 -o "$HOME/storage/downloads/Fume_Contas_Servidor_0.39.41.zip" "https://github.com/NorthWind557/Fume-Releases/releases/download/v0.39.41/Fume_Contas_Servidor_0.39.41.zip"
+curl --fail --location --retry 3 -o "$HOME/storage/downloads/Fume_Contas_Servidor_0.39.42.zip" "https://github.com/NorthWind557/Fume-Releases/releases/download/v0.39.42/Fume_Contas_Servidor_0.39.42.zip"
 ```
 
 Se a pasta não existir, execute `termux-setup-storage` e permita o acesso. O item 1 descreve a alternativa pelo PC.
 
 ## 1. Encontrar o pacote no PC, inclusive após atualização pelo Fume
 
-1. No **PC principal ou segundo PC**, abra o Fume 0.39.41.
+1. No **PC principal ou segundo PC**, abra o Fume 0.39.42.
 2. Clique em **CONFIGURAÇÕES → Conta → Abrir arquivos para atualizar o J8**.
-3. O Explorador abrirá a pasta **Servidor_J8**. Nela estão este guia e **Fume_Contas_Servidor_0.39.41.zip**. Você não precisa baixar o ZIP grande do instalador novamente.
+3. O Explorador abrirá a pasta **Servidor_J8**. Nela estão este guia e **Fume_Contas_Servidor_0.39.42.zip**. Você não precisa baixar o ZIP grande do instalador novamente.
 4. Conecte o J8 por cabo USB, desbloqueie-o e escolha **Transferência de arquivos** na notificação USB do Android.
 5. No PC, abra **Este Computador → Galaxy J8 → Armazenamento interno → Download**.
-6. Copie **Fume_Contas_Servidor_0.39.41.zip** para essa pasta Download. Mantenha o nome e não extraia no PC. Não copie o instalador Windows para o celular.
+6. Copie **Fume_Contas_Servidor_0.39.42.zip** para essa pasta Download. Mantenha o nome e não extraia no PC. Não copie o instalador Windows para o celular.
 
 O ZIP contém somente código e instruções; não contém contas, senhas, banco ou certificados privados.
 
@@ -38,7 +38,7 @@ Se este comando falhar, não aplique a atualização: informe a mensagem. Não a
 ## 3. Extrair o pacote novo
 
 ```sh
-python -m zipfile -e "$HOME/storage/downloads/Fume_Contas_Servidor_0.39.41.zip" "$HOME/fume-servidor-atualizacao-03941"
+python -m zipfile -e "$HOME/storage/downloads/Fume_Contas_Servidor_0.39.42.zip" "$HOME/fume-servidor-atualizacao-03942"
 ```
 
 O comando pode terminar sem mensagem: é normal. Se o arquivo não for encontrado, confira o nome em Download. Se houver erro de permissão, execute o próximo comando, permita o acesso solicitado pelo Android e repita a extração:
@@ -50,7 +50,7 @@ termux-setup-storage
 ## 4. Aplicar a atualização preservando os dados
 
 ```sh
-python "$HOME/fume-servidor-atualizacao-03941/atualizar_servidor.py"
+python "$HOME/fume-servidor-atualizacao-03942/atualizar_servidor.py"
 ```
 
 Espere **Atualização copiada. Contas, IDs, banco e certificado preservados.** O atualizador verifica os arquivos, guarda um backup privado e substitui o código da API e da operação. As configurações de inicialização automática permanecem.
@@ -79,7 +79,7 @@ O esperado é **Teste HTTPS agora: ok** e **API respondeu por HTTPS neste J8**. 
 2. Clique em **Diagnosticar conexão** e, se necessário, **Reconectar conta salva**. Confira o ID já conhecido.
 3. Clique no seu nome/foto no canto superior direito. Clique em **Atualizar**, depois em **Sincronizar capas** para enviar as capas já personalizadas.
 4. Espere a confirmação **Perfil salvo no J8**. As imagens escolhidas na Biblioteca são enviadas como miniaturas; o restante da Biblioteca não é enviado.
-5. No segundo PC com Fume 0.39.41, abra o perfil ou clique em **Atualizar perfil**. A alteração deve aparecer na mesma conta. Atualize ambos os PCs para 0.39.41 antes de editar as novas composições. Clientes anteriores mantêm login e seus dados; não exibem as camadas novas.
+5. No segundo PC com Fume 0.39.42, abra o perfil ou clique em **Atualizar perfil**. A alteração deve aparecer na mesma conta. Atualize ambos os PCs para 0.39.42 antes de editar as novas composições. Clientes anteriores mantêm login e seus dados; não exibem as camadas novas.
 
 Não é necessário digitar a senha novamente se Manter conectado já está funcionando.
 
